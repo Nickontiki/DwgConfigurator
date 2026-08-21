@@ -1,0 +1,248 @@
+<Window x:Class="DwgConfigurator.ConfiguratorApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:DwgConfigurator.ConfiguratorApp.Views"
+        Title="DWG Configurator" Width="1280" Height="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5">
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="420"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!-- ═══ PANNELLO SINISTRO: Form ═══ -->
+        <Border Grid.Column="0" Background="White" CornerRadius="8"
+                BorderBrush="#DDD" BorderThickness="1" Padding="12">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- Titolo -->
+                    <TextBlock Text="⚙ DWG Configurator" FontSize="20" FontWeight="Bold"
+                               Foreground="#333" Margin="0,0,0,12"/>
+
+                    <!-- ── COMMESSA CON AUTOCOMPLETE ── -->
+                    <GroupBox Header="📋 Commessa" Margin="0,0,0,8">
+                        <Grid>
+                            <TextBox x:Name="TxtCommessa"
+                                     Text="{Binding Commessa, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="14"/>
+                            <Popup x:Name="CommessaPopup"
+                                   IsOpen="{Binding IsCommessaPopupOpen}"
+                                   PlacementTarget="{Binding ElementName=TxtCommessa}"
+                                   Placement="Bottom"
+                                   Width="{Binding ActualWidth, ElementName=TxtCommessa}"
+                                   StaysOpen="False"
+                                   AllowsTransparency="True">
+                                <Border Background="White" BorderBrush="#CCC" BorderThickness="1"
+                                        CornerRadius="0,0,4,4" MaxHeight="250">
+                                    <ListBox ItemsSource="{Binding CommessaSuggestions}"
+                                             SelectedItem="{Binding SelectedCommessaSuggestion}"
+                                             DisplayMemberPath="DisplayText"
+                                             BorderThickness="0"
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="Padding" Value="8,6"/>
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#E8F0FE"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                    </ListBox>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- ── GRUPPO PRODOTTO ── -->
+                    <GroupBox Header="📦 Gamma" Margin="0,0,0,8">
+                        <ComboBox ItemsSource="{Binding ProductGroups}"
+                                  SelectedItem="{Binding SelectedProductGroup}"
+                                  DisplayMemberPath="Name"
+                                  FontSize="14"/>
+                    </GroupBox>
+                    <!-- ── PRODOTTO ── -->
+                    <GroupBox Header="📦 Configurazione Prodotto" Margin="0,0,0,8">
+                        <ComboBox ItemsSource="{Binding ProductTypes}"
+                                  SelectedItem="{Binding SelectedProductType}"
+                                  FontSize="14"/>
+                    </GroupBox>
+                    <!-- ── ATTRIBUTI DINAMICI ── -->
+                    <GroupBox Header="✏️ Attributi Dinamici" Margin="0,0,0,8">
+                        <StackPanel>
+                            <!-- Customer -->
+                            <TextBlock Text="Cliente" FontWeight="SemiBold" Margin="0,4,0,2"/>
+                            <Label Content="CUSTOMER1"/>
+                            <TextBox Text="{Binding Customer1, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="CUSTOMER2"/>
+                            <TextBox Text="{Binding Customer2, UpdateSourceTrigger=PropertyChanged}"/>
+                            <!-- Final Client -->
+                            <TextBlock Text="Cliente Finale" FontWeight="SemiBold" Margin="0,8,0,2"/>
+                            <Label Content="FINALCLIENT1"/>
+                            <TextBox Text="{Binding FinalClient1, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="FINALCLIENT2"/>
+                            <TextBox Text="{Binding FinalClient2, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="FINALCLIENT3"/>
+                            <TextBox Text="{Binding FinalClient3, UpdateSourceTrigger=PropertyChanged}"/>
+                            <!-- Installation Site -->
+                            <TextBlock Text="Sito d'installazione" FontWeight="SemiBold" Margin="0,8,0,2"/>
+                            <Label Content="INSTALLATIONSITE1"/>
+                            <TextBox Text="{Binding InstallationSite1, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="INSTALLATIONSITE2"/>
+                            <TextBox Text="{Binding InstallationSite2, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="INSTALLATIONSITE3"/>
+                            <TextBox Text="{Binding InstallationSite3, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="INSTALLATIONSITE4"/>
+                            <TextBox Text="{Binding InstallationSite4, UpdateSourceTrigger=PropertyChanged}"/>
+                            <!-- Drawing Title -->
+                            <TextBlock Text="Titolo Disegno" FontWeight="SemiBold" Margin="0,8,0,2"/>
+                            <Label Content="DRAWINGTITLE1"/>
+                            <TextBox Text="{Binding DrawingTitle1, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="DRAWINGTITLE2"/>
+                            <TextBox Text="{Binding DrawingTitle2, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="DRAWINGTITLE3"/>
+                            <TextBox Text="{Binding DrawingTitle3, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="DRAWINGTITLE4"/>
+                            <TextBox Text="{Binding DrawingTitle4, UpdateSourceTrigger=PropertyChanged}"/>
+                            <!-- Model -->
+                            <TextBlock Text="Modello" FontWeight="SemiBold" Margin="0,8,0,2"/>
+                            <Label Content="MODEL1"/>
+                            <TextBox Text="{Binding Model1, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="MODEL2"/>
+                            <TextBox Text="{Binding Model2, UpdateSourceTrigger=PropertyChanged}"/>
+                            <!-- Commessa / Disegno / Barcode -->
+                            <TextBlock Text="Commessa / Disegno / Barcode" FontWeight="SemiBold" Margin="0,8,0,2"/>
+                            <Label Content="ORDERTEXT"/>
+                            <TextBox Text="{Binding OrderText, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="DRAWINGNUMBER"/>
+                            <TextBox Text="{Binding DrawingNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="BAR_CODE"/>
+                            <TextBox Text="{Binding BarCode, UpdateSourceTrigger=PropertyChanged}"/>
+                            <!-- Scala / Formato / File -->
+                            <TextBlock Text="Scala / Formato / File" FontWeight="SemiBold" Margin="0,8,0,2"/>
+                            <Label Content="SCALETEXT"/>
+                            <TextBox Text="{Binding ScaleText, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="FORMATTEXT"/>
+                            <TextBox Text="{Binding FormatText, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="FILETEXT"/>
+                            <TextBox Text="{Binding FileText, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <!-- ── REVISIONE ── -->
+                    <GroupBox Header="📝 Revisione" Margin="0,0,0,8">
+                        <StackPanel>
+                            <TextBlock Text="Dati Revisione" FontWeight="SemiBold" Margin="0,4,0,2"/>
+                            <Label Content="REVISIONE"/>
+                            <TextBox Text="{Binding RevRevision, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="DATA"/>
+                            <TextBox Text="{Binding RevDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="DESCRIZIONE"/>
+                            <TextBox Text="{Binding RevDescription, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="DISEGNATO"/>
+                            <TextBox Text="{Binding RevDrawn, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="CONTROLLATO"/>
+                            <TextBox Text="{Binding RevChecked, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="APPROVAZIONE" Margin="0,8,0,0"/>
+                            <TextBox Text="{Binding Approved, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <!-- ── PULSANTE GENERA + DEBUG ── -->
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="🚀 Avvia Configurazione"
+                                Command="{Binding GenerateCommand}"
+                                FontSize="16" FontWeight="Bold"
+                                Height="48"
+                                Background="#0078D4" Foreground="White"
+                                Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="6" Padding="8">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <CheckBox Grid.Column="1" Content="Debug"
+                                  IsChecked="{Binding IsDebugEnabled}"
+                                  VerticalAlignment="Center" Margin="12,0,0,0"
+                                  FontSize="12" Foreground="#888"/>
+                    </Grid>
+                    <!-- Status -->
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="Green"
+                               FontSize="12" Margin="4,8,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <!-- ═══ PANNELLO DESTRO: Anteprima Cartiglio ═══ -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Grid.Row="0" Header="🔍 Anteprima Cartiglio" Margin="0,0,0,4">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding CartiglioPreviewAttributes}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="6,4" Margin="0,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="200"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Key}"
+                                                   FontFamily="Consolas" FontSize="12"
+                                                   FontWeight="SemiBold" Foreground="#555"/>
+                                        <Border Grid.Column="1" Background="#FAFAFA" CornerRadius="3" Padding="6,2">
+                                            <TextBlock Text="{Binding Value}" FontSize="12" Foreground="#222" TextWrapping="Wrap"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </GroupBox>
+
+            <GroupBox Grid.Row="1" Header="🔍 Anteprima Legenda" Margin="0,4,0,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding LegendaPreviewAttributes}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="6,4" Margin="0,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="200"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Key}"
+                                                   FontFamily="Consolas" FontSize="12"
+                                                   FontWeight="SemiBold" Foreground="#555"/>
+                                        <Border Grid.Column="1" Background="#FAFAFA" CornerRadius="3" Padding="6,2">
+                                            <TextBlock Text="{Binding Value}" FontSize="12" Foreground="#222" TextWrapping="Wrap"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
